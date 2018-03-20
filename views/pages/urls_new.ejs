@@ -1,0 +1,28 @@
+<!-- views/pages/urls_new.ejs -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>TinyApp</title>
+    <% include ../partials/_head %>
+</head>
+    <body class="container" style="font-size:20px; padding:50px;">
+        
+        <header>
+            <% include ../partials/_header %>
+        </header>
+
+        <main>
+            <form action="/urls" method="POST" style="margin:150px;">
+                <label for="longURL">Enter a URL:</label>
+                <input id="longURL" type="text" name="longURL" placeholder="http://" style="width: 300px">
+                <input type="submit" value="Submit">
+            </form>
+        </main>
+
+        <footer>
+            <% include ../partials/_footer %>
+        </footer>
+    
+    </body>
+</html>
