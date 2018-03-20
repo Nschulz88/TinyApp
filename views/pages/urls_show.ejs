@@ -1,0 +1,27 @@
+<!-- views/pages/urls_show.ejs -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>TinyApp</title>
+    <% include ../partials/_head %>
+</head>
+<body class="container">
+
+<header>
+    <% include ../partials/_header %>
+</header>
+
+<main>
+    <ul>
+    <li><%= shortURL %> : <%= urls[shortURL] %></li>
+    </ul>
+
+</main>
+
+<footer>
+    <% include ../partials/_footer %>
+</footer>
+
+</body>
+</html>

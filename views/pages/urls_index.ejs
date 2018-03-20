@@ -1,0 +1,34 @@
+<!-- views/pages/index.ejs -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>TinyApp</title>
+    <% include ../partials/_head %>
+</head>
+<body class="container">
+
+<header>
+    <% include ../partials/_header %>
+</header>
+
+<main>
+    <ul>
+   <% for(shortURL in urls) { %>
+    <li><%= shortURL %> : <%= urls[shortURL] %></li>
+    <% } %>
+    </ul>
+
+    <form action="/" method="post">
+        You can shorten a url here: <input type="text" name="longUrl"><br>
+        <input type="submit" value="Submit">
+    </form>
+
+</main>
+
+<footer>
+    <% include ../partials/_footer %>
+</footer>
+
+</body>
+</html>
