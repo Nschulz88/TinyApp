@@ -1,0 +1,33 @@
+<!-- views/pages/register.ejs -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>TinyApp</title>
+    <% include ../partials/_head %>
+    <link rel='stylesheet' href='/styles/style.css' />
+</head>
+<body class="container">
+
+<header>
+    <% include ../partials/_header %>
+</header>
+
+<main>
+  <form action="/register" method="POST">
+      <label for="email">E-mail: </label>
+      <input type="email" name="email"></br>
+      <label for="password">Password: </label>
+      <input type="password" name="password"></br>
+      <input type="submit" value="Register">
+  </form>
+
+
+</main>
+
+<footer>
+    <% include ../partials/_footer %>
+</footer>
+
+</body>
+</html>
