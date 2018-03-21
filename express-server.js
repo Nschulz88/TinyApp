@@ -1,9 +1,12 @@
 const express = require("express");
-const app = express();
 const PORT = process.env.PORT || 8080; // default port 8080
 const bodyParser = require("body-parser");
+const cookieParser = require('cookie-parser')
+const app = express();
+
 app.use(bodyParser.urlencoded({extended: true}));
 app.use("/styles",express.static(__dirname + "/styles"));
+app.use(cookieParser());
 
 // this sets the view engine to ejs
 app.set('view engine', "ejs");
