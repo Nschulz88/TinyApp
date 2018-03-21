@@ -17,6 +17,12 @@
     <li><%= shortURL %> : <%= urls[shortURL] %></li>
     </ul>
 
+    <form action="/urls/:id" method="POST" style="margin:150px;">
+        <label for="longURL">Update long URL:</label>
+        <input id="longURL" type="text" name="longURL" placeholder="http://" style="width: 300px">
+        <input type="submit" value="Update">
+    </form>
+
 </main>
 
 <footer>

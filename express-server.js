@@ -3,6 +3,7 @@ const app = express();
 const PORT = process.env.PORT || 8080; // default port 8080
 const bodyParser = require("body-parser");
 app.use(bodyParser.urlencoded({extended: true}));
+app.use("/styles",express.static(__dirname + "/styles"));
 
 // this sets the view engine to ejs
 app.set('view engine', "ejs");
@@ -49,6 +50,18 @@ app.post("/urls", (req, res) => {
   urlDatabase[shortURL] = req.body.longURL;
   let templateVars = { urls: urlDatabase };
   res.redirect(`/urls/${shortURL}`);
+});
+
+app.post("/urls/:id/delete", (req, res) => {
+  let shortURL = req.params.id
+  delete urlDatabase[shortURL]
+  res.redirect(`/urls`);
+});
+
+app.post("/urls/:id", (req, res) => {
+  let longURL = req.params.id
+  // --> STILL TO IMPLEMENT : update the given long URL 
+  res.redirect(`/urls`);
 });
 
 app.listen(PORT, () => {
