@@ -54,13 +54,15 @@ app.post("/urls", (req, res) => {
 
 app.post("/urls/:id/delete", (req, res) => {
   let shortURL = req.params.id
+  console.log("my shortURL is:", shortURL);
   delete urlDatabase[shortURL]
   res.redirect(`/urls`);
 });
 
 app.post("/urls/:id", (req, res) => {
-  let longURL = req.params.id
-  // --> STILL TO IMPLEMENT : update the given long URL 
+  console.log("my longURL is:", req.body.longURL);
+  console.log("my longURL is:", req.params.id);
+  urlDatabase[req.params.id] = req.body.longURL;
   res.redirect(`/urls`);
 });
 

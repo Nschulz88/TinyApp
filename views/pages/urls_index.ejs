@@ -16,9 +16,10 @@
 <main>
     <ul>
    <% for(shortURL in urls) { %>
-    <li class="urls"><%= shortURL %> : <%= urls[shortURL] %>
+    <li class="urls"><%= shortURL %> &#x27A1; <%= urls[shortURL] %>
+    <a class="urls" href="/urls/<%= shortURL %>">Edit</a>
     <form method="POST" action="/urls/<%= shortURL %>/delete"><button class="btn">Delete &#x1F680;</button>
-    </form>
+    </form><br>
     </li>
     <% } %>
     </ul>
