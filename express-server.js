@@ -27,7 +27,11 @@ function generateRandomString() {
 
 // urls index page 
 app.get('/urls', (req, res) => {
-    let templateVars = { urls: urlDatabase };
+  console.log("Checking my cookie: ", req.cookies.username);
+    let templateVars = { 
+      urls: urlDatabase,
+      username: req.cookies["username"]
+    };
     res.render('pages/urls_index', templateVars);
 });
 
@@ -43,7 +47,8 @@ app.get("/u/:shortURL", (req, res) => {
 app.get("/urls/:id", (req, res) => {
   let templateVars = { 
     shortURL: req.params.id,
-    urls: urlDatabase
+    urls: urlDatabase,
+    username: req.cookies["username"]
   };
   res.render('pages/urls_show', templateVars);
 });
@@ -68,6 +73,12 @@ app.post("/urls/:id", (req, res) => {
   urlDatabase[req.params.id] = req.body.longURL;
   res.redirect(`/urls`);
 });
+
+app.post("/login", (req, res) => {
+  console.log("Checking req.body.username", req.body.username);
+  res.cookie('username', req.body.username);
+  res.redirect(`/urls`);
+})
 
 app.listen(PORT, () => {
   console.log(`Example app listening on port ${PORT}!`);
