@@ -5,11 +5,11 @@
     
         <div class="navbar-header">
             <a class="navbar-brand" href="#">
-                <span class="welcome-header"></span>
-                &#x2728; Welcome to TinyApp!
-            </a>
-            <% if (username) { %>
-            <a class="navbar-brand">Hello, <%= username %></a>
+                <span class="welcome-header">&#x2728; Welcome to TinyApp!</span>
+                
+            </a></br>
+            <% if (isLoggedIn) { %>
+            <a class="navbar-brand">Hello, <%= user.email %></a>
             <form class="navbar-brand" action="/logout" method="POST">
                 <input type="submit" value="Logout">
             </form>
@@ -18,7 +18,8 @@
                 <label for="username">Enter your username</label>
                 <input id="username" type="text" name="username">
                 <input type="submit" value="Login">
-            </form>
+            </form></br>
+            <a href="/register" >Or register here..</a>
             <% } %>
             
         </div>

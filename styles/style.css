@@ -1,3 +1,7 @@
+body {
+    font-family: 'Montserrat', sans-serif;
+}
+
 .btn {
     background-color:rgb(233, 69, 64);
     border-radius: 20px;
@@ -10,6 +14,11 @@
 }
 
 .container-fluid {
-    margin-bottom: 5px;
+    margin-top: 10px;
+    margin-bottom: 10px;
 }
 
+.welcome-header {
+    font-size: 1.8em;
+    font-weight: bold;
+}
