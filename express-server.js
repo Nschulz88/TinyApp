@@ -55,7 +55,14 @@ app.get('/urls', (req, res) => {
 });
 
 app.get("/urls/new", (req, res) => {
-  res.render('pages/urls_new');
+  let targetUser = users[req.cookies.user_id];
+  let templateVars = { 
+    shortURL: req.params.id,
+    urls: urlDatabase,
+    user: targetUser,
+    isLoggedIn: !!targetUser
+  };
+  res.render('pages/urls_new', templateVars);
 });
 
 app.get("/u/:shortURL", (req, res) => {
@@ -68,7 +75,7 @@ app.get("/urls/:id", (req, res) => {
   let templateVars = { 
     shortURL: req.params.id,
     urls: urlDatabase,
-    userDatabase: users,
+    user: targetUser,
     isLoggedIn: !!targetUser
   };
   res.render('pages/urls_show', templateVars);
@@ -113,12 +120,22 @@ app.post("/urls/:id", (req, res) => {
 });
 
 app.post("/login", (req, res) => {
-  res.cookie('username', req.body.username);
-  res.redirect(`/urls`);
+  if (req.body.email && req.body.password) {
+    for (let user in users) {
+      if (users[user].email === req.body.email) {
+        if (users[user].password === req.body.password) {
+        res.cookie('user_id', users[user].id);
+        res.redirect(`/urls`);
+        return;
+        } 
+      } 
+    }
+    res.sendStatus(403);
+  }
 });
 
 app.post("/logout", (req, res) => {
-  res.clearCookie('username');
+  res.clearCookie('user_id');
   res.redirect(`/urls`);
 });
 
