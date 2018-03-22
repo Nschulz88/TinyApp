@@ -49,21 +49,28 @@ function generateRandomString() {
   return randomString;
 }
 
+function urlsForUser(userid) {
+  let userUrls = [];
+  for (let shortURL in urlDatabase) {
+    if (urlDatabase[shortURL].userID === userid) {
+      userUrls.push({[shortURL]: urlDatabase[shortURL].url });
+    }
+  }
+  console.log(userUrls);
+  return(userUrls);
+}
+
 // urls index page 
 app.get('/urls', (req, res) => {
   let targetUser = users[req.cookies.user_id];
-  let privUrls = [];  // Currently working on trying to only display private URLS
-  for (let url in urlDatabase) {
-    if (url.userID === req.cookies.user_id) {
-      privUrls.push(url.userID);
-      console.log(privUrls);
+    let templateVars = {
+      urls: urlDatabase,
+      isLoggedIn: !!targetUser,
+      user: targetUser
     }
-  }
-  let templateVars = {
-    urls: urlDatabase,
-    isLoggedIn: !!targetUser,
-    user: targetUser
-  }
+  if (targetUser !== undefined) {
+    templateVars.urls = urlsForUser(targetUser.id);
+    }
   res.render('pages/urls_index', templateVars);
 });
 
@@ -82,7 +89,7 @@ app.get("/urls/new", (req, res) => {
 });
 
 app.get("/u/:shortURL", (req, res) => {
-    let longURL = urlDatabase[req.params.shortURL];
+    let longURL = urlDatabase[req.params.shortURL].url;
   res.redirect(longURL);
 });
 

@@ -16,13 +16,13 @@
 <main>
     <% if (isLoggedIn) { %>
     <ul>
-    <% for(shortURL in urls) { %>
-    <li class="urls"><%= shortURL %> &#x27A1; <%= urls[shortURL].url %>
-    <a class="urls" href="/urls/<%= shortURL %>">Edit</a>
-    <form method="POST" action="/urls/<%= shortURL %>/delete"><button class="btn">Delete &#x1F680;</button>
+    <% urls.forEach(function (url) { %>
+    <li class="urls"><%= Object.keys(url) %> &#x27A1; <%= Object.values(url) %>
+    <a class="urls" href="/urls/<%= Object.keys(url) %>">Edit</a>
+    <form method="POST" action="/urls/<%= Object.keys(url) %>/delete"><button class="btn">Delete &#x1F680;</button>
     </form><br>
     </li>
-    <% } %>
+    <% }); %>
     </ul>
 
     <a href="/urls/new" >Shorten a URL here</a>
