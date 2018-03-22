@@ -12,8 +12,14 @@ app.use(cookieParser());
 app.set('view engine', "ejs");
 
 let urlDatabase = {
-  "b2xVn2": "http://www.lighthouselabs.ca",
-  "9sm5xK": "http://www.google.com"
+  "b2xVn2": {
+    url: "http://www.lighthouselabs.ca",
+    userID: "aaaaaa"
+  },
+  "9sm5xK": {
+    url: "http://www.google.com",
+    userID: "userRandomID"
+  }
 };
 
 let users = { 
@@ -62,7 +68,10 @@ app.get("/urls/new", (req, res) => {
     user: targetUser,
     isLoggedIn: !!targetUser
   };
+  if (targetUser) {
   res.render('pages/urls_new', templateVars);
+  }
+  res.redirect('/login');
 });
 
 app.get("/u/:shortURL", (req, res) => {
@@ -110,7 +119,9 @@ app.post("/urls", (req, res) => {
 
 app.post("/urls/:id/delete", (req, res) => {
   let shortURL = req.params.id
-  delete urlDatabase[shortURL]
+  if(req.cookies.user_id === urlDatabase[shortURL].userID) {
+    delete urlDatabase[shortURL]
+  }
   res.redirect(`/urls`);
 });
 

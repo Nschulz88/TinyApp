@@ -14,9 +14,10 @@
 </header>
 
 <main>
+    <% if (isLoggedIn) { %>
     <ul>
-   <% for(shortURL in urls) { %>
-    <li class="urls"><%= shortURL %> &#x27A1; <%= urls[shortURL] %>
+    <% for(shortURL in urls) { %>
+    <li class="urls"><%= shortURL %> &#x27A1; <%= urls[shortURL].url %>
     <a class="urls" href="/urls/<%= shortURL %>">Edit</a>
     <form method="POST" action="/urls/<%= shortURL %>/delete"><button class="btn">Delete &#x1F680;</button>
     </form><br>
@@ -25,6 +26,9 @@
     </ul>
 
     <a href="/urls/new" >Shorten a URL here</a>
+    <% } else { %>
+    <h2> &#x2B06; Please Login or Register above</h2> 
+    <% } %>
 
 </main>
 
