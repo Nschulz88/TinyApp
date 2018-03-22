@@ -52,6 +52,13 @@ function generateRandomString() {
 // urls index page 
 app.get('/urls', (req, res) => {
   let targetUser = users[req.cookies.user_id];
+  let privUrls = [];  // Currently working on trying to only display private URLS
+  for (let url in urlDatabase) {
+    if (url.userID === req.cookies.user_id) {
+      privUrls.push(url.userID);
+      console.log(privUrls);
+    }
+  }
   let templateVars = {
     urls: urlDatabase,
     isLoggedIn: !!targetUser,
@@ -81,13 +88,22 @@ app.get("/u/:shortURL", (req, res) => {
 
 app.get("/urls/:id", (req, res) => {
   let targetUser = users[req.cookies.user_id];
-  let templateVars = { 
-    shortURL: req.params.id,
-    urls: urlDatabase,
-    user: targetUser,
-    isLoggedIn: !!targetUser
-  };
-  res.render('pages/urls_show', templateVars);
+  const urlObj = urlDatabase[req.params.id];
+  if (req.cookies.user_id !== urlObj.userID) {
+    res.send("YOU ARE NOT AUTHORIZED TO EDIT THIS!")
+  }
+  else if (urlObj) {
+    let templateVars = { 
+      shortURL: req.params.id,
+      longUrl: urlObj.url,
+      user: targetUser,
+      isLoggedIn: !!targetUser
+    };
+    res.render('pages/urls_show', templateVars);
+  } else {
+    res.sendStatus(404);
+  }
+
 });
 
 app.get("/register", (req, res) => {
@@ -112,7 +128,13 @@ app.get("/login", (req, res) => {
 
 app.post("/urls", (req, res) => {
   let shortURL = generateRandomString();
-  urlDatabase[shortURL] = req.body.longURL;
+  urlDatabase[shortURL] = {
+    url: undefined,
+    userID: undefined
+  };
+  urlDatabase[shortURL].url = req.body.longURL;
+  urlDatabase[shortURL].userID = req.cookies.user_id;
+  console.log("req.cookies.user_id: ", req.cookies.user_id);
   let templateVars = { urls: urlDatabase };
   res.redirect(`/urls/${shortURL}`);
 });
@@ -126,7 +148,7 @@ app.post("/urls/:id/delete", (req, res) => {
 });
 
 app.post("/urls/:id", (req, res) => {
-  urlDatabase[req.params.id] = req.body.longURL;
+  urlDatabase[req.params.id].url = req.body.longURL;
   res.redirect(`/urls`);
 });
 
