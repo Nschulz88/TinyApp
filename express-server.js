@@ -1,12 +1,15 @@
 const express = require("express");
 const PORT = process.env.PORT || 8080; // default port 8080
 const bodyParser = require("body-parser");
-const cookieParser = require('cookie-parser')
+const cookieSession = require('cookie-session')
 const app = express();
+const bcrypt = require('bcrypt');
 
 app.use(bodyParser.urlencoded({extended: true}));
 app.use("/styles",express.static(__dirname + "/styles"));
-app.use(cookieParser());
+app.use(cookieSession({
+  keys: ['fluffybunny', 'floop']
+}));
 
 // this sets the view engine to ejs
 app.set('view engine', "ejs");
@@ -36,7 +39,7 @@ let users = {
   "aaaaaa": {
     id: "aaaaaa", 
     email: "nat@nat.nat", 
-    password: "nat"
+    password: bcrypt.hashSync('nat', 10)   // just for checking purpose.
   }
 }
 
@@ -56,13 +59,12 @@ function urlsForUser(userid) {
       userUrls.push({[shortURL]: urlDatabase[shortURL].url });
     }
   }
-  console.log(userUrls);
   return(userUrls);
 }
 
 // urls index page 
 app.get('/urls', (req, res) => {
-  let targetUser = users[req.cookies.user_id];
+  let targetUser = users[req.session.user_id];
     let templateVars = {
       urls: urlDatabase,
       isLoggedIn: !!targetUser,
@@ -75,8 +77,8 @@ app.get('/urls', (req, res) => {
 });
 
 app.get("/urls/new", (req, res) => {
-  let targetUser = users[req.cookies.user_id];
-  let templateVars = { 
+  let targetUser = users[req.session.user_id];
+  let templateVars = {
     shortURL: req.params.id,
     urls: urlDatabase,
     user: targetUser,
@@ -94,12 +96,11 @@ app.get("/u/:shortURL", (req, res) => {
 });
 
 app.get("/urls/:id", (req, res) => {
-  let targetUser = users[req.cookies.user_id];
+  let targetUser = users[req.session.user_id];
   const urlObj = urlDatabase[req.params.id];
-  if (req.cookies.user_id !== urlObj.userID) {
+  if (req.session.user_id !== urlObj.userID) {
     res.send("YOU ARE NOT AUTHORIZED TO EDIT THIS!")
-  }
-  else if (urlObj) {
+  } else if (urlObj) {
     let templateVars = { 
       shortURL: req.params.id,
       longUrl: urlObj.url,
@@ -114,7 +115,8 @@ app.get("/urls/:id", (req, res) => {
 });
 
 app.get("/register", (req, res) => {
-  let targetUser = users[req.cookies.user_id];
+  console.log(req.session);
+  let targetUser = users[req.session.user_id];
   let templateVars = { 
     userDatabase: users,
     isLoggedIn: !!targetUser,
@@ -124,7 +126,7 @@ app.get("/register", (req, res) => {
 });
 
 app.get("/login", (req, res) => {
-  let targetUser = users[req.cookies.user_id];
+  let targetUser = users[req.session.user_id];
   let templateVars = { 
     userDatabase: users,
     isLoggedIn: !!targetUser,
@@ -140,15 +142,14 @@ app.post("/urls", (req, res) => {
     userID: undefined
   };
   urlDatabase[shortURL].url = req.body.longURL;
-  urlDatabase[shortURL].userID = req.cookies.user_id;
-  console.log("req.cookies.user_id: ", req.cookies.user_id);
+  urlDatabase[shortURL].userID = req.session.user_id;
   let templateVars = { urls: urlDatabase };
   res.redirect(`/urls/${shortURL}`);
 });
 
 app.post("/urls/:id/delete", (req, res) => {
   let shortURL = req.params.id
-  if(req.cookies.user_id === urlDatabase[shortURL].userID) {
+  if(req.session.user_id === urlDatabase[shortURL].userID) {
     delete urlDatabase[shortURL]
   }
   res.redirect(`/urls`);
@@ -161,25 +162,30 @@ app.post("/urls/:id", (req, res) => {
 
 app.post("/login", (req, res) => {
   if (req.body.email && req.body.password) {
+    console.log("YEP, this one checks!");
     for (let user in users) {
       if (users[user].email === req.body.email) {
-        if (users[user].password === req.body.password) {
-        res.cookie('user_id', users[user].id);
-        res.redirect(`/urls`);
-        return;
-        } 
+        console.log("YEP, this one checks tooooooooooo!");
+        if (bcrypt.compareSync(req.body.password, users[user].password)) {
+          console.log("yeyyy it checked my hashed passwordssssss!!!!");
+          res.session('user_id', users[user].id);
+          res.redirect(`/urls`);
+          return;
+        }
       } 
-    }
-    res.sendStatus(403);
+    } 
   }
+  res.sendStatus(403);
 });
 
 app.post("/logout", (req, res) => {
-  res.clearCookie('user_id');
+  req.session = null;
   res.redirect(`/urls`);
 });
 
 app.post("/register", (req, res) => {
+  let userPassword = req.body.password;
+  let hashedPassword = bcrypt.hashSync(userPassword, 10);
   if (req.body.email && req.body.password) {
     for (let user in users) {
       if (users[user].email === req.body.email) {
@@ -192,8 +198,9 @@ app.post("/register", (req, res) => {
       users[userID] = {};
       users[userID].id = userID;
       users[userID].email = req.body.email;
-      users[userID].password = req.body.password;
-      res.cookie('user_id', userID);
+      users[userID].password = hashedPassword;
+      console.log("logging hashed PW --------> ",users[userID].password);
+      req.session = {'user_id': userID};
       res.redirect(`/urls`);
       return;
     }
