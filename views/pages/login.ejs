@@ -1,0 +1,32 @@
+  <!-- views/pages/login.ejs -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>TinyApp</title>
+    <% include ../partials/_head %>
+    <link rel='stylesheet' href='/styles/style.css' />
+</head>
+<body class="container">
+
+<header>
+    <% include ../partials/_header %>
+</header>
+
+<main>
+    <h3>Login:</h3>
+    <form action="/login" method="POST">
+        <label for="email">E-mail</label>
+        <input id="email" type="text" name="email"></br>
+        <label for="password">Password</label>
+        <input id="password" type="password" name="password"></br>
+        <input type="submit" value="Login">
+    </form></br>
+</main>
+
+<footer>
+    <% include ../partials/_footer %>
+</footer>
+
+</body>
+</html>

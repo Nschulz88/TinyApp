@@ -46,21 +46,11 @@ function generateRandomString() {
 // urls index page 
 app.get('/urls', (req, res) => {
   let targetUser = users[req.cookies.user_id];
-  console.log(targetUser);
   let templateVars = {
     urls: urlDatabase,
     isLoggedIn: !!targetUser,
     user: targetUser
   }
-  // if (req.cookies.user_id) {
-  //   templateVars = { 
-  //     userDatabase: users[req.cookies.user_id]
-  //   };
-  // } else {
-  //   templateVars = {
-  //     userDatabase: undefined
-  //   }
-  // }
   res.render('pages/urls_index', templateVars);
 });
 
@@ -92,6 +82,16 @@ app.get("/register", (req, res) => {
     user: targetUser
   };
   res.render('pages/register', templateVars);
+});
+
+app.get("/login", (req, res) => {
+  let targetUser = users[req.cookies.user_id];
+  let templateVars = { 
+    userDatabase: users,
+    isLoggedIn: !!targetUser,
+    user: targetUser
+  };
+  res.render('pages/login', templateVars);
 });
 
 app.post("/urls", (req, res) => {
