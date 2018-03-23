@@ -86,8 +86,9 @@ app.get("/urls/new", (req, res) => {
   };
   if (targetUser) {
   res.render('pages/urls_new', templateVars);
-  }
+  } else {
   res.redirect('/login');
+  }
 });
 
 app.get("/u/:shortURL", (req, res) => {
@@ -95,10 +96,12 @@ app.get("/u/:shortURL", (req, res) => {
   res.redirect(longURL);
 });
 
-app.get("/urls/:id", (req, res) => {
+app.get("/urls/:id", (req, res, next) => {
   let targetUser = users[req.session.user_id];
   const urlObj = urlDatabase[req.params.id];
-  if (req.session.user_id !== urlObj.userID) {
+  if(!urlObj){
+    next();
+  } else if (req.session.user_id !== urlObj.userID) {
     res.send("YOU ARE NOT AUTHORIZED TO EDIT THIS!")
   } else if (urlObj) {
     let templateVars = { 
@@ -144,7 +147,7 @@ app.post("/urls", (req, res) => {
   urlDatabase[shortURL].url = req.body.longURL;
   urlDatabase[shortURL].userID = req.session.user_id;
   let templateVars = { urls: urlDatabase };
-  res.redirect(`/urls/${shortURL}`);
+  res.redirect(`/urls`); // changed here /${shortURL}
 });
 
 app.post("/urls/:id/delete", (req, res) => {
@@ -168,7 +171,7 @@ app.post("/login", (req, res) => {
         console.log("YEP, this one checks tooooooooooo!");
         if (bcrypt.compareSync(req.body.password, users[user].password)) {
           console.log("yeyyy it checked my hashed passwordssssss!!!!");
-          res.session('user_id', users[user].id);
+          req.session = {'user_id': users[user].id};
           res.redirect(`/urls`);
           return;
         }
@@ -205,6 +208,14 @@ app.post("/register", (req, res) => {
       return;
     }
     res.send("Please enter an email and a password");
+});
+
+app.use((req, res, next) => {
+  res.status(404).render('pages/404');
+});
+
+app.use((err, req, res, next) => {
+  res.status(500).render('pages/500', {err})
 });
 
 app.listen(PORT, () => {
