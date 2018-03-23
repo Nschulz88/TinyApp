@@ -2,11 +2,17 @@ body {
     font-family: 'Montserrat', sans-serif;
 }
 
-.btn {
-    background-color:rgb(233, 69, 64);
-    border-radius: 20px;
-    border: 1px solid black;
-    font-size: small;
+main {
+    padding: 20px;
+}
+
+.delete-btn {
+    background-color: coral;
+    border-radius: 15px;
+    border: 1px solid grey;
+    color: darkslategrey;
+    margin-top: 2px;
+    padding-top: 3px;
 }
 
 .urls {
@@ -25,5 +31,22 @@ body {
 
 .headerlinks {
     margin-left: 20px;
-   
+}
+
+.urls {
+    font-size: 20px;
+    margin-right: 10px;
+}
+
+#logout-btn .button {
+    border-radius: 15px;
+    padding: 5px 10px;
+}
+
+:hover#logout-btn {
+    box-shadow: 1px 1px;
+}
+
+:hover.delete-btn {
+    box-shadow: 1px 1px;
 }

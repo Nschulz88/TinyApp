@@ -1,13 +1,17 @@
+ <!-- views/pages/500.ejs -->
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
+    <title>500 Error</title>
 </head>
-<body>
-    <img src='http://http.cat/500'/>
-    <p><%= locals.err %></p>
-</body>
+    <body>
+        <main>
+            <img src='http://http.cat/500' style="width:80%"/>
+            <p><%= locals.err %></p>
+        </main>
+    </body>
 </html>

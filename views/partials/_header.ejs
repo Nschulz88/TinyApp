@@ -5,13 +5,13 @@
     
         <div class="navbar-header">
             <a class="navbar-brand" href="#">
-                <span class="welcome-header">&#x2728; Welcome to TinyApp!</span>
-                
+                <span class="welcome-header">&#x2728; Welcome to TinyApp!</span>  
             </a></br>
+
             <% if (isLoggedIn) { %>
-            <a class="navbar-brand">Hello, <%= user.email %></a>
+            <a class="navbar-brand">Hello, <%= user.email %> &#x1F44B; </a>
             <form class="navbar-brand" action="/logout" method="POST">
-                <input type="submit" value="Logout">
+                <input id="logout-btn" type="submit" value="Logout">
             </form>
             <% } else { %>
             <p class="headerlinks"><a href="/login">LOGIN &#x1F511;</a></br>

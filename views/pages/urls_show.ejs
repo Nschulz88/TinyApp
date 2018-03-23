@@ -3,31 +3,32 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>TinyApp</title>
     <% include ../partials/_head %>
+    <link rel='stylesheet' href='/styles/style.css'/>
 </head>
-<body class="container">
+    <body class="container">
 
-<header>
-    <% include ../partials/_header %>
-</header>
+    <header>
+        <% include ../partials/_header %>
+    </header>
 
-<main>
-    <ul>
-    <li><%= shortURL %> : <%= longUrl %></li>
-    </ul>
+    <main>
+        <p><a href="/urls"> &#x1F519; Go back </a></p><br>
+        <ul>
+        <li><a href="/u/<%= shortURL %>"><%= shortURL %> &#x27A1; <%= longUrl %></a></li>
+        </ul>
 
-    <form action="/urls/<%= shortURL %>" method="POST" style="margin:150px;">
-        <label for="longURL">Update long URL:</label>
-        <input id="longURL" type="text" name="longURL" placeholder="http://" style="width: 300px">
-        <input type="submit" value="Update">
-    </form>
+        <form action="/urls/<%= shortURL %>" method="POST" style="margin:150px;">
+            <label for="longURL">Update long URL:</label>
+            <input id="longURL" type="text" name="longURL" placeholder="http://">
+            <input class="button" type="submit" value="Update">
+        </form>
 
-</main>
+    </main>
 
-<footer>
-    <% include ../partials/_footer %>
-</footer>
+    <footer>
+        <% include ../partials/_footer %>
+    </footer>
 
-</body>
+    </body>
 </html>

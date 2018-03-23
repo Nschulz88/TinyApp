@@ -3,7 +3,6 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>TinyApp</title>
     <% include ../partials/_head %>
     <link rel='stylesheet' href='/styles/style.css' />
 </head>
@@ -17,17 +16,18 @@
     <% if (isLoggedIn) { %>
     <ul>
     <% urls.forEach(function (url) { %>
-    <li class="urls"><%= Object.keys(url) %> &#x27A1; <%= Object.values(url) %>
-    <a class="urls" href="/urls/<%= Object.keys(url) %>">Edit</a>
-    <form method="POST" action="/urls/<%= Object.keys(url) %>/delete"><button class="btn">Delete &#x1F680;</button>
-    </form><br>
+    <li> 
+        <a class="urls" href="/u/<%= Object.keys(url) %>"><%= Object.keys(url) %> &#x27A1; <%= Object.values(url) %></a>
+        <a class="edit" href="/urls/<%= Object.keys(url) %>"> &#x270D; Edit URL</a>
+        <form method="POST" action="/urls/<%= Object.keys(url) %>/delete"><button class="delete-btn">Delete &#x1F5D1; </button>
+        </form><br>
     </li>
     <% }); %>
     </ul>
 
-    <a href="/urls/new" >Shorten a URL here</a>
+    <a href="/urls/new" > Shorten a URL here &#x2702; </a>
     <% } else { %>
-    <h2>  Please Login or Register above &#x2934;</h2> 
+    <h2>  Please Login or Register above &#x2934;</h2>
     <% } %>
 
 </main>
